@@ -5,29 +5,34 @@ sources:
     schema: "{{ var('pipedrive_schema', 'pipedrive') }}"
     database: "{% if target.type != 'spark'%}{{ var('pipedrive_database', target.database) }}{% endif %}"
     tables:
+      - name: activities
+      - name: deals
+      - name: leads
+      - name: leads_value
+      - name: stages
       - name: users
 
 models:
-  - name: pipedrive__users
-    description: "A table storing all user information in Pipedrive."
+  - name: pipedrive__deals
+    description: "A table storing all deal information in Pipedrive."
     columns:
-      - name: user_id
-        description: "The unique identifier for the user"
+      - name: deal_id
+        description: "The unique identifier for the deal"
         tests:
           - unique
           - not_null
 
 metrics:
-  - name: number_of_users
-    label: Number of users
-    model: ref('pipedrive__users')
-    description: "The number of users"
+  - name: number_of_deals
+    label: Number of deals
+    model: ref('pipedrive__deals')
+    description: "The number of deals"
 
     type: count
     sql: issue_id
 
     timestamp: created_at_timestamp
-    time_grains: [day, week, month]
+    time_grains: [ day, week, month ]
 
     dimensions:
       - state

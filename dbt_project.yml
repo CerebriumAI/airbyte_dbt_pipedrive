@@ -23,4 +23,9 @@ models:
 
 vars:
   airbyte_pipedrive:
+    activities: "{{ source('airbyte_pipedrive','activities') }}"
+    deals: "{{ source('airbyte_pipedrive','deals') }}"
+    leads: "{{ source('airbyte_pipedrive','leads') }}"
+    leads_value: "{{ source('airbyte_pipedrive','leads_value') }}"
+    stages: "{{ source('airbyte_pipedrive','stages') }}"
     users: "{{ source('airbyte_pipedrive','users') }}"
