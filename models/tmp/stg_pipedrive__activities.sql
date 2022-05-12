@@ -15,9 +15,9 @@ activities as (
     from
         {{ var('activities') }}
     left join users on assigned_to_user_id = users.user_id
-    order by
-        id,
-        date desc
+order by
+    id,
+    date desc
 ),
 
 user_activities as (
@@ -36,4 +36,7 @@ user_activities as (
         type
 )
 
-select * from user_activities
+select
+    *
+from
+    user_activities

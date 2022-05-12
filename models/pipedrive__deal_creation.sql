@@ -1,38 +1,38 @@
-WITH agents AS (
-    SELECT
-        id AS "user_id",
-        name "agent_name"
-    FROM
+with users as (
+    select
+        id as "user_id",
+        name "user_name"
+    from
         {{ var('users') }}
 ),
 
-stages AS (
-    SELECT
-        id AS "stage_id",
+stages as (
+    select
+        id as "stage_id",
         name as "stage_name"
-    FROM
+    from
         {{ var('stages') }}
 ),
 
-opened_deals AS (
-    SELECT DISTINCT ON (id)
+opened_deals as (
+    select distinct on (id)
         id as deal_id,
         title as deal_name,
-        date_trunc('day', add_time) AS "date",
+        date_trunc('day', add_time) as "date",
         update_time,
-        LOWER(TRIM(agents.agent_name)) as agent_name,
-        LOWER(TRIM(stages.stage_name)) as stage_name,
-        close_time - add_time AS "expected_time_to_close"
-    FROM
+        lower(trim(users.user_name)) as user_name,
+        lower(trim(stages.stage_name)) as stage_name,
+        close_time - add_time as "expected_time_to_close"
+    from
         {{ var('deals') }}
-    LEFT JOIN agents USING (user_id)
-    LEFT JOIN stages USING (stage_id)
-    WHERE status != 'deleted'
-ORDER BY
+    left join users using (user_id)
+    left join stages using (stage_id)
+    where status != 'deleted'
+order by
     id,
-    update_time ASC
+    update_time asc
 )
-SELECT
+select
     *
-FROM
+from
     opened_deals
