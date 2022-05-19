@@ -13,11 +13,39 @@ sources:
       - name: users
 
 models:
+  - name: pipedrive__activities
+    database: "{% if target.type != 'spark'%}{{ var('pipedrive_database', target.database) }}{% endif %}"
+    table: activities
+    columns:
+      - name: activity_id
+        description: "The unique identifier for the activity"
+        tests:
+          - unique
+          - not_null
+
   - name: pipedrive__deals
     description: "A table storing all deal information in Pipedrive."
     columns:
       - name: deal_id
         description: "The unique identifier for the deal"
+        tests:
+          - unique
+          - not_null
+
+  - name: pipedrive__leads
+    description: "A table storing all lead information in Pipedrive."
+    columns:
+      - name: lead_id
+        description: "The unique identifier for the lead"
+        tests:
+          - unique
+          - not_null
+
+  - name: pipedrive__users
+    description: "A table storing all user information in Pipedrive."
+    columns:
+      - name: user_id
+        description: "The unique identifier for the user"
         tests:
           - unique
           - not_null
@@ -31,9 +59,96 @@ metrics:
     type: count
     sql: issue_id
 
-    timestamp: created_at_timestamp
+    timestamp: date
     time_grains: [ day, week, month ]
 
     dimensions:
-      - state
+      - stage_name
+      - user
 
+  - name: number_of_activities
+    label: Number of activities
+    model: ref('pipedrive__activities')
+    description: "The number of activities"
+
+    type: count
+    sql: activity_id
+
+    timestamp: date
+    time_grains: [ day, week, month ]
+
+    dimensions:
+      - type
+      - done
+      - user_name
+
+  - name: number_of_leads
+    label: Number of leads
+    model: ref('pipedrive__leads')
+    description: "The number of leads"
+
+    type: count
+    sql: lead_id
+
+    timestamp: date
+    time_grains: [ day, week, month ]
+
+    dimensions:
+      - user_name
+      - source
+
+  - name: total_lead_value
+    label: Total Lead Value
+    model: ref('pipedrive__leads')
+    description: "The total value of all leads"
+
+    type: sum
+    sql: amount
+
+    timestamp: date
+    time_grains: [ day, week, month ]
+
+    dimensions:
+      - user_name
+      - source
+
+  - name: average_lead_value
+    label: Average Lead Value
+    model: ref('pipedrive__leads')
+    description: "The average value of all leads"
+
+    type: average
+    sql: amount
+
+    timestamp: date
+    time_grains: [ day, week, month ]
+
+    dimensions:
+      - user_name
+      - source
+
+  - name: average_expected_time_to_close
+    label: Average Expected Time To Close
+    model: ref('pipedrive__leads')
+    description: "The average expected time to close"
+
+    type: average
+    sql: expected_time_to_close
+
+    timestamp: date
+    time_grains: [ day, week, month ]
+
+    dimensions:
+      - user_name
+      - source
+
+  - name: number_of_users
+    label: Number of users
+    model: ref('pipedrive__users')
+    description: "The number of users"
+
+    type: count
+    sql: user_id
+
+    timestamp: created_at_date
+    time_grains: [ day, week, month ]

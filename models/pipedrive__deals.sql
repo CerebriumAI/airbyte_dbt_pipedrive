@@ -21,7 +21,15 @@ deals as (
 
 deals_final as (
     select
-        deals.*,
+        deals.added_at_time,
+        deals.closed_at_time,
+        deals.currency,
+        deals.deal_id,
+        deals.deal_name,
+        deals.is_active,
+        deals.is_deleted,
+        deals.updated_at_time,
+        deals.weighted_value,
         stages.stage_name,
         users.user_name
     from

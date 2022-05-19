@@ -26,17 +26,4 @@ order by
     update_time desc
 )
 
-select
-    date,
-    lower(trim(user_name)) as user_name,
-    lower(trim(source)) as source,
-    count(*) as "total_leads",
-    coalesce(sum(amount), 0) as "total_lead_value",
-    coalesce(round(avg(amount), 2), 0) as "avg_lead_value",
-    coalesce(avg(expected_time_to_close), interval '0 hours') as "avg_expected_time_to_close"
-from
-    leads
-group by
-    date,
-    user_name,
-    source
+select * from leads
