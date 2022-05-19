@@ -7,7 +7,7 @@ with users as (
 
 leads as (
     select distinct on (id)
-        id as lead_id,
+        lead_id,
         _airbyte_leads_hashid,
         date_trunc('day', add_time) as "date",
         update_time,

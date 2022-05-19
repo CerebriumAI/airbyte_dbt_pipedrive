@@ -8,12 +8,12 @@ with users as (
 activities as (
     select distinct on (id)
         id,
-        date_trunc('day', date(update_time)) as "date",
+        date,
         users.user_name,
         type,
         done
     from
-        {{ var('activities') }}
+        {{ ref('stg_pipedrive__activities') }}
     left join users on assigned_to_user_id = users.user_id
     order by
         id,
