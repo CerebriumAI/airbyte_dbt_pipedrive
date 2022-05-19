@@ -11,7 +11,8 @@ activities as (
         updated_at_date,
         users.user_name,
         type,
-        is_done
+        is_done,
+        assigned_to_user_id
     from
         {{ ref('stg_pipedrive__activities') }}
     left join users on assigned_to_user_id = users.user_id
@@ -22,6 +23,7 @@ activities as (
 
 user_activities as (
     select
+        assigned_to_user_id,
         updated_at_date,
         lower(trim(user_name)) as user_name,
         lower(trim(type)) as type,
@@ -31,6 +33,7 @@ user_activities as (
     from
         activities
     group by
+        assigned_to_user_id,
         updated_at_date,
         user_name,
         type
