@@ -20,7 +20,23 @@ models:
       - name: activity_id
         description: "The unique identifier for the activity"
         tests:
+          - not_null
           - unique
+      - name: updated_at_date
+        description: "The date the activity was last updated"
+      - name: user_id
+        description: "The user id that performed this activity"
+        tests:
+          - not_null
+      - name: user_name
+        description: "The user name that performed this activity"
+      - name: type
+        description: "The type of activity"
+        tests:
+          - not_null
+      - name: is_done
+        description: "Was the activity completed"
+        tests:
           - not_null
 
   - name: pipedrive__deals
@@ -31,6 +47,40 @@ models:
         tests:
           - unique
           - not_null
+      - name: created_at_date
+        description: "The date the deal was created"
+        tests:
+          - not_null
+      - name: closed_at_date
+        description: "The date the deal was closed"
+      - name: currency
+        description: "The currency of the deal"
+        tests:
+          - not_null
+      - name: deal_name
+        description: "The name of the deal"
+      - name: is_active
+        description: "Is the deal active"
+        tests:
+          - not_null
+      - name: is_deleted
+        description: "Is the deal deleted"
+        tests:
+          - not_null
+      - name: updated_at_date
+        description: "The date the deal was last updated"
+        tests:
+          - not_null
+      - name: weighted_value
+        description: "The weighted value of the deal"
+      - name: stage_name
+        description: "The stage of the deal"
+      - name: stage_id
+        description: "The stage id of the deal"
+      - name: user_id
+        description: "The user id assigned to the deal"
+      - name: user_name
+        description: "The user name assigned to the deal"
 
   - name: pipedrive__leads
     description: "A table storing all lead information in Pipedrive."
@@ -49,6 +99,22 @@ models:
         tests:
           - unique
           - not_null
+      - name: user_name
+        description: "The name of the user"
+        tests:
+          - not_null
+      - name: created_at_date
+        description: "The date the user was created"
+        tests:
+          - not_null
+      - name: is_active
+        description: "Is the user active"
+        tests:
+          - not_null
+      - name: is_admin
+        description: "Is the user an admin"
+        tests:
+          - not_null
 
 metrics:
   - name: number_of_deals
@@ -63,8 +129,8 @@ metrics:
     time_grains: [ day, week, month ]
 
     dimensions:
-      - stage_name
-      - user
+      - stage_id
+      - user_id
 
   - name: number_of_activities
     label: Number of activities
@@ -79,8 +145,8 @@ metrics:
 
     dimensions:
       - type
-      - done
-      - user_name
+      - is_done
+      - user_id
 
   - name: number_of_leads
     label: Number of leads
@@ -94,7 +160,7 @@ metrics:
     time_grains: [ day, week, month ]
 
     dimensions:
-      - user_name
+      - user_id
       - source
 
   - name: total_lead_value
@@ -109,7 +175,7 @@ metrics:
     time_grains: [ day, week, month ]
 
     dimensions:
-      - user_name
+      - user_id
       - source
 
   - name: average_lead_value
@@ -124,7 +190,7 @@ metrics:
     time_grains: [ day, week, month ]
 
     dimensions:
-      - user_name
+      - user_id
       - source
 
   - name: average_expected_time_to_close
@@ -139,7 +205,7 @@ metrics:
     time_grains: [ day, week, month ]
 
     dimensions:
-      - user_name
+      - user_id
       - source
 
   - name: number_of_users

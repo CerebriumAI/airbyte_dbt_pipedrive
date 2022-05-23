@@ -10,6 +10,8 @@ with lead_value as (
 leads as (
     select
         id as lead_id,
+        date_trunc('day', add_time) as "created_at_date",
+        date_trunc('day', update_time) as "updated_at_date",
         *
     from
         {{ var('leads') }}

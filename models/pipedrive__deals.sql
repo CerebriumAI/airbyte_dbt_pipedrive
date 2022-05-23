@@ -21,17 +21,19 @@ deals as (
 
 deals_final as (
     select
-        deals.added_at_time,
-        deals.closed_at_time,
+        deals.created_at_date,
+        deals.updated_at_date,
+        deals.closed_at_date,
         deals.currency,
         deals.deal_id,
         deals.deal_name,
         deals.is_active,
         deals.is_deleted,
-        deals.updated_at_time,
         deals.weighted_value,
         stages.stage_name,
-        users.user_name
+        stages.stage_id,
+        users.user_name,
+        users.user_id
     from
         deals
     left join users using (user_id)
@@ -39,7 +41,7 @@ deals_final as (
     where status != 'deleted'
 order by
     id,
-    update_time desc
+    updated_at_date desc
 )
 
 select * from deals_final
