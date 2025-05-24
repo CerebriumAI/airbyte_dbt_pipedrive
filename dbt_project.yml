@@ -17,9 +17,9 @@ clean-targets:
 
 models:
   airbyte_pipedrive:
-    materialized: table
+    +materialized: table
     tmp:
-      materialized: view
+      +materialized: view
 
 vars:
   airbyte_pipedrive:
